@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import dayjs from 'dayjs'
 import {
@@ -6,10 +7,13 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
 import { cn } from '@/lib/utils'
-import { get } from 'http'
+import { useLogStore } from '@/store'
+import { log } from 'console'
 
 
 const Calendar = () => {
+
+  const logs = useLogStore((state) => state.log)
 
   const getDateMonth = ( year= dayjs().year(), month = dayjs().month()) => {
     const startDate = dayjs().year(year).month(month).date(1)
@@ -23,7 +27,6 @@ const Calendar = () => {
       }
       
       return dateArray;
-    
   }
 
   const getColor = (value:number) => {
@@ -42,16 +45,19 @@ const Calendar = () => {
   return (
     <div className='flex flex-wrap border border-dashed p-10 items-center justify-center rounded-md gap-2'>
       {
-          getDateMonth().map((value,index) => (
-            <HoverCard key={index}>
-              <HoverCardTrigger>
-                 <div className={cn('h-5 w-5  rounded-sm cursor-pointer',getColor(hour || 0))}></div>
-              </HoverCardTrigger>
-              <HoverCardContent>
-                {hour || 0} Hour on {value}
-              </HoverCardContent>
-            </HoverCard>
-          ))
+          getDateMonth().map((value,index) => {
+            const log = logs[value]
+            return (
+              <HoverCard key={index}>
+                <HoverCardTrigger>
+                  <div className={cn('h-5 w-5  rounded-sm cursor-pointer',getColor(log?.hour || 0))}></div>
+                </HoverCardTrigger>
+                <HoverCardContent>
+                  {log?.hour || 0} Hour on {value}
+                </HoverCardContent>
+              </HoverCard>
+            )
+         })
       }
     </div>
   )
