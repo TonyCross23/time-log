@@ -13,7 +13,7 @@ import { log } from 'console'
 
 const Calendar = () => {
 
-  const logs = useLogStore((state) => state.log)
+  const logs = useLogStore((state) => state.logs);
 
   const getDateMonth = ( year= dayjs().year(), month = dayjs().month()) => {
     const startDate = dayjs().year(year).month(month).date(1)
